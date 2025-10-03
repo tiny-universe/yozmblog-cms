@@ -210,12 +210,6 @@ export interface Post {
      * Image for social media sharing. Leave blank to use the featured image.
      */
     metaImage?: (number | null) | Media;
-    keywords?:
-      | {
-          keyword: string;
-          id?: string | null;
-        }[]
-      | null;
     /**
      * The canonical URL for this post. Leave blank to auto-generate.
      */
@@ -404,12 +398,6 @@ export interface SportEvent {
      * Image for social media sharing. Leave blank to use the poster.
      */
     metaImage?: (number | null) | Media;
-    keywords?:
-      | {
-          keyword: string;
-          id?: string | null;
-        }[]
-      | null;
     /**
      * The canonical URL for this event. Leave blank to auto-generate.
      */
@@ -573,12 +561,6 @@ export interface PostsSelect<T extends boolean = true> {
         metaTitle?: T;
         metaDescription?: T;
         metaImage?: T;
-        keywords?:
-          | T
-          | {
-              keyword?: T;
-              id?: T;
-            };
         canonical?: T;
         noIndex?: T;
       };
@@ -670,12 +652,6 @@ export interface SportEventsSelect<T extends boolean = true> {
         metaTitle?: T;
         metaDescription?: T;
         metaImage?: T;
-        keywords?:
-          | T
-          | {
-              keyword?: T;
-              id?: T;
-            };
         canonical?: T;
         noIndex?: T;
       };

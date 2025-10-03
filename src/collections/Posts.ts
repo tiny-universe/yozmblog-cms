@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
@@ -159,6 +160,7 @@ export const Posts: CollectionConfig = {
       type: 'richText',
       required: true,
       localized: true,
+      editor: lexicalEditor(),
       label: {
         en: 'Content',
         ko: '내용',
@@ -278,25 +280,6 @@ export const Posts: CollectionConfig = {
               fr: 'Image pour le partage sur les réseaux sociaux. Laissez vide pour utiliser l\'image en vedette.',
             },
           },
-        },
-        {
-          name: 'keywords',
-          type: 'array',
-          localized: true,
-          label: {
-            en: 'Keywords',
-            ko: '키워드',
-            ja: 'キーワード',
-            es: 'Palabras clave',
-            fr: 'Mots-clés',
-          },
-          fields: [
-            {
-              name: 'keyword',
-              type: 'text',
-              required: true,
-            },
-          ],
         },
         {
           name: 'canonical',

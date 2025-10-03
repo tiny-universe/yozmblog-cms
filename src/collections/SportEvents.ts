@@ -790,25 +790,6 @@ export const SportEvents: CollectionConfig = {
           },
         },
         {
-          name: 'keywords',
-          type: 'array',
-          localized: true,
-          label: {
-            en: 'Keywords',
-            ko: '키워드',
-            ja: 'キーワード',
-            es: 'Palabras clave',
-            fr: 'Mots-clés',
-          },
-          fields: [
-            {
-              name: 'keyword',
-              type: 'text',
-              required: true,
-            },
-          ],
-        },
-        {
           name: 'canonical',
           type: 'text',
           label: {

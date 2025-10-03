@@ -42,6 +42,20 @@ export const Posts: CollectionConfig = {
       },
     },
     {
+      name: 'content',
+      type: 'richText',
+      required: true,
+      localized: true,
+      editor: lexicalEditor(),
+      label: {
+        en: 'Content',
+        ko: '내용',
+        ja: 'コンテンツ',
+        es: 'Contenido',
+        fr: 'Contenu',
+      },
+    },
+    {
       name: 'slug',
       type: 'text',
       required: true,
@@ -153,20 +167,6 @@ export const Posts: CollectionConfig = {
         ja: '抜粋',
         es: 'Extracto',
         fr: 'Extrait',
-      },
-    },
-    {
-      name: 'content',
-      type: 'richText',
-      required: true,
-      localized: true,
-      editor: lexicalEditor(),
-      label: {
-        en: 'Content',
-        ko: '내용',
-        ja: 'コンテンツ',
-        es: 'Contenido',
-        fr: 'Contenu',
       },
     },
     {

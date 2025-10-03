@@ -169,12 +169,6 @@ export interface Media {
 export interface Post {
   id: number;
   title: string;
-  slug: string;
-  status: 'draft' | 'published';
-  publishedDate?: string | null;
-  author: number | User;
-  featuredImage?: (number | null) | Media;
-  excerpt?: string | null;
   content: {
     root: {
       type: string;
@@ -190,6 +184,12 @@ export interface Post {
     };
     [k: string]: unknown;
   };
+  slug: string;
+  status: 'draft' | 'published';
+  publishedDate?: string | null;
+  author: number | User;
+  featuredImage?: (number | null) | Media;
+  excerpt?: string | null;
   categories?: (number | Category)[] | null;
   tags?:
     | {
@@ -541,13 +541,13 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
+  content?: T;
   slug?: T;
   status?: T;
   publishedDate?: T;
   author?: T;
   featuredImage?: T;
   excerpt?: T;
-  content?: T;
   categories?: T;
   tags?:
     | T

@@ -69,6 +69,10 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    posts: Post;
+    categories: Category;
+    'sport-events': SportEvent;
+    'sport-categories': SportCategory;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -77,6 +81,10 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    'sport-events': SportEventsSelect<false> | SportEventsSelect<true>;
+    'sport-categories': SportCategoriesSelect<false> | SportCategoriesSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -86,7 +94,7 @@ export interface Config {
   };
   globals: {};
   globalsSelect: {};
-  locale: null;
+  locale: 'ko' | 'en' | 'ja' | 'es' | 'fr';
   user: User & {
     collection: 'users';
   };
@@ -153,8 +161,280 @@ export interface Media {
   filesize?: number | null;
   width?: number | null;
   height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  title: string;
+  slug: string;
+  status: 'draft' | 'published';
+  publishedDate?: string | null;
+  author: number | User;
+  featuredImage?: (number | null) | Media;
+  excerpt?: string | null;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  categories?: (number | Category)[] | null;
+  tags?:
+    | {
+        tag: string;
+        id?: string | null;
+      }[]
+    | null;
+  seo?: {
+    /**
+     * Override the default title for SEO. Leave blank to use the post title.
+     */
+    metaTitle?: string | null;
+    /**
+     * A brief description for search engines (150-160 characters recommended).
+     */
+    metaDescription?: string | null;
+    /**
+     * Image for social media sharing. Leave blank to use the featured image.
+     */
+    metaImage?: (number | null) | Media;
+    keywords?:
+      | {
+          keyword: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * The canonical URL for this post. Leave blank to auto-generate.
+     */
+    canonical?: string | null;
+    /**
+     * Prevent search engines from indexing this post.
+     */
+    noIndex?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sport-events".
+ */
+export interface SportEvent {
+  id: number;
+  title: string;
+  slug: string;
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  sportCategory: number | SportCategory;
+  level: 'professional' | 'amateur' | 'student' | 'youth' | 'open';
+  status: 'draft' | 'published';
+  eventStatus: 'upcoming' | 'registration_open' | 'in_progress' | 'completed' | 'cancelled';
+  featured?: boolean | null;
+  schedule: {
+    startDate: string;
+    endDate: string;
+    registrationStart?: string | null;
+    registrationDeadline?: string | null;
+  };
+  venue: {
+    venueName: string;
+    address: string;
+    latitude?: number | null;
+    longitude?: number | null;
+    /**
+     * Parking, transportation, facilities, etc.
+     */
+    venueDetails?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
+  participation?: {
+    eligibility?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    entryFee?: number | null;
+    currency?: ('KRW' | 'USD' | 'EUR' | 'JPY') | null;
+    maxParticipants?: number | null;
+    currentParticipants?: number | null;
+    registrationLink?: string | null;
+  };
+  details: {
+    rules?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    prizes?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    organizer: string;
+    sponsors?:
+      | {
+          sponsorName: string;
+          sponsorLogo?: (number | null) | Media;
+          id?: string | null;
+        }[]
+      | null;
+    contactEmail?: string | null;
+    contactPhone?: string | null;
+    officialWebsite?: string | null;
+  };
+  poster?: (number | null) | Media;
+  gallery?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  relatedPosts?: (number | Post)[] | null;
+  /**
+   * Fill this after the event is completed
+   */
+  results?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  seo?: {
+    /**
+     * Override the default title for SEO. Leave blank to use the event title.
+     */
+    metaTitle?: string | null;
+    /**
+     * A brief description for search engines (150-160 characters recommended).
+     */
+    metaDescription?: string | null;
+    /**
+     * Image for social media sharing. Leave blank to use the poster.
+     */
+    metaImage?: (number | null) | Media;
+    keywords?:
+      | {
+          keyword: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * The canonical URL for this event. Leave blank to auto-generate.
+     */
+    canonical?: string | null;
+    /**
+     * Prevent search engines from indexing this event.
+     */
+    noIndex?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sport-categories".
+ */
+export interface SportCategory {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string | null;
+  icon?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -170,6 +450,22 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'sport-events';
+        value: number | SportEvent;
+      } | null)
+    | ({
+        relationTo: 'sport-categories';
+        value: number | SportCategory;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -250,8 +546,154 @@ export interface MediaSelect<T extends boolean = true> {
   filesize?: T;
   width?: T;
   height?: T;
-  focalX?: T;
-  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  status?: T;
+  publishedDate?: T;
+  author?: T;
+  featuredImage?: T;
+  excerpt?: T;
+  content?: T;
+  categories?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        metaImage?: T;
+        keywords?:
+          | T
+          | {
+              keyword?: T;
+              id?: T;
+            };
+        canonical?: T;
+        noIndex?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sport-events_select".
+ */
+export interface SportEventsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  description?: T;
+  sportCategory?: T;
+  level?: T;
+  status?: T;
+  eventStatus?: T;
+  featured?: T;
+  schedule?:
+    | T
+    | {
+        startDate?: T;
+        endDate?: T;
+        registrationStart?: T;
+        registrationDeadline?: T;
+      };
+  venue?:
+    | T
+    | {
+        venueName?: T;
+        address?: T;
+        latitude?: T;
+        longitude?: T;
+        venueDetails?: T;
+      };
+  participation?:
+    | T
+    | {
+        eligibility?: T;
+        entryFee?: T;
+        currency?: T;
+        maxParticipants?: T;
+        currentParticipants?: T;
+        registrationLink?: T;
+      };
+  details?:
+    | T
+    | {
+        rules?: T;
+        prizes?: T;
+        organizer?: T;
+        sponsors?:
+          | T
+          | {
+              sponsorName?: T;
+              sponsorLogo?: T;
+              id?: T;
+            };
+        contactEmail?: T;
+        contactPhone?: T;
+        officialWebsite?: T;
+      };
+  poster?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  relatedPosts?: T;
+  results?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        metaImage?: T;
+        keywords?:
+          | T
+          | {
+              keyword?: T;
+              id?: T;
+            };
+        canonical?: T;
+        noIndex?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sport-categories_select".
+ */
+export interface SportCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  icon?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

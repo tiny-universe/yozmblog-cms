@@ -11,6 +11,10 @@ import { r2Storage } from '@payloadcms/storage-r2'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Posts } from './collections/Posts'
+import { Categories } from './collections/Categories'
+import { SportEvents } from './collections/SportEvents'
+import { SportCategories } from './collections/SportCategories'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -26,13 +30,18 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Posts, Categories, SportEvents, SportCategories],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: sqliteD1Adapter({ binding: cloudflare.env.D1 }),
+  localization: {
+    locales: ['ko', 'en', 'ja', 'es', 'fr'],
+    defaultLocale: 'ko',
+    fallback: true,
+  },
   plugins: [
     payloadCloudPlugin(),
     r2Storage({
